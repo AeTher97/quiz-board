@@ -120,7 +120,7 @@ const useGoogleApi = () => {
         }
     }
 
-    async function save(name, quizData) {
+    async function save(name, quizData, callback) {
         setSaving(true)
         executeWithGoogleAuth(() => {
             const token = gapi.client.getToken().access_token;
@@ -141,10 +141,36 @@ const useGoogleApi = () => {
                 body: formData,
                 headers: {Authorization: "Bearer " + token},
             })
+                .then((res) => res.json().then(callback))
+                .finally(() => setSaving(false));
+        })
+    }
+
+    async function saveExistingFile(name, fileId, quizData) {
+        setSaving(true)
+        executeWithGoogleAuth(() => {
+            const token = gapi.client.getToken().access_token;
+            var formData = new FormData();
+            var fileMetadata = {
+                name: name + ".quiz"
+            };
+            formData.append("metadata", new Blob([JSON.stringify(fileMetadata)], {type: "application/json"}), {
+                contentType: "application/json",
+            });
+            formData.append("data", new Blob([quizData], {type: "application/json"}), {
+                filename: name,
+                contentType: "text/plain",
+            });
+            fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`, {
+                method: "PATCH",
+                body: formData,
+                headers: {Authorization: "Bearer " + token},
+            })
                 .then((res) => res.json())
                 .finally(() => setSaving(false));
         })
     }
+
 
     const openFile = async (id, callback) => {
         executeWithGoogleAuth(async () => {
@@ -169,7 +195,17 @@ const useGoogleApi = () => {
 
     }
 
-    return {loggedIn, save, quizFiles, browseQuizFiles, openFile, quizFilesLoading, saving, gapiClientInitialized}
+    return {
+        loggedIn,
+        save,
+        saveExistingFile,
+        quizFiles,
+        browseQuizFiles,
+        openFile,
+        quizFilesLoading,
+        saving,
+        gapiClientInitialized
+    }
 };
 
 export default useGoogleApi;

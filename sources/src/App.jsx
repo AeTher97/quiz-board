@@ -14,7 +14,7 @@ import {
 } from "@mui/joy";
 import useGoogleApi from "./GoogleApi.jsx";
 import ContentEditable from "react-contenteditable";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 const sumTeamPoints = (team) => {
     return team.categoryPoints.map(pointObject => pointObject.points)
@@ -82,6 +82,7 @@ function App() {
     const [playoffDialogOpen, setPlayoffDialogOpen] = useState(false);
     const [quizLoading, setQuizLoading] = useState(false);
     const [presenterView, setPresenterView] = useState(false);
+    const [openedFileId, setOpenedFileId] = useState(null);
     const [tempPlayoffValue, setTempPlayoffValue] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
     const [data, setData] = useState({
@@ -92,6 +93,7 @@ function App() {
         loggedIn,
         quizFiles,
         save,
+        saveExistingFile,
         browseQuizFiles,
         openFile,
         quizFilesLoading,
@@ -120,6 +122,7 @@ function App() {
             newData.name = newName;
             return newData;
         })
+        document.title = newName;
     }
 
     const setTeamName = (id, name) => {
@@ -208,7 +211,15 @@ function App() {
                         browseQuizFiles();
                     }}>Otwórz</Button>
                     <Button size={"sm"} variant={"outlined"} loading={saving}
-                            onClick={() => save(data.name, JSON.stringify(data))}>Zapisz</Button>
+                            onClick={() => {
+                                if (openedFileId) {
+                                    saveExistingFile(data.name, openedFileId, JSON.stringify(data));
+                                } else {
+                                    save(data.name, JSON.stringify(data), (res) => {
+                                        setOpenedFileId(res.id)
+                                    })
+                                }
+                            }}>Zapisz</Button>
                     {!presenterView && <Button onClick={() => setPresenterView(true)} variant={"soft"}>
                         Widok prezentera
                     </Button>}
@@ -261,11 +272,13 @@ function App() {
                             onClick={() => {
                                 setQuizLoading(true);
                                 setLoadOpen(false);
-                                setSelectedFile(null);
                                 openFile(selectedFile, (json) => {
                                     setData(json)
                                     setQuizLoading(false);
+                                    document.title = json.name;
+                                    setOpenedFileId(selectedFile)
                                 })
+                                setSelectedFile(null);
                             }}>Otwórz</Button>
                 </ModalDialog>
             </Modal>
