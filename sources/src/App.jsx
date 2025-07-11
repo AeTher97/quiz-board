@@ -224,7 +224,7 @@ function App() {
                         Widok prezentera
                     </Button>}
                 </div>}
-                <div style={{visibility: presenterView ? "none" : "visible"}} id="topDiv"/>
+                <div style={{visibility: presenterView ? "hidden" : "visible"}} id="topDiv"/>
                 {presenterView && <ModalClose onClick={() => setPresenterView(false)}/>}
             </div>
             <div style={{padding: 10}}>
