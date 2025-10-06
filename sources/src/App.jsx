@@ -15,7 +15,6 @@ import {
 import useGoogleApi from "./GoogleApi.jsx";
 import ContentEditable from "react-contenteditable";
 import {v4 as uuidv4} from 'uuid';
-import Resizable from "./Resizable.jsx";
 
 const sumTeamPoints = (team) => {
     return team.categoryPoints.map(pointObject => pointObject.points)
@@ -112,6 +111,10 @@ function App() {
             )
         }
     }, [gapiClientInitialized]);
+
+    useEffect(() => {
+        document.body.setAttribute("spellcheck", false);
+    }, []);
 
     const cloneData = () => {
         return JSON.parse(JSON.stringify(data));
