@@ -26,7 +26,7 @@ const allPointsFilled = (team) => {
 
 const getClosestDistanceToPlayoffValue = (teams, playoffValue) => {
     let closestDistance = Number.MAX_VALUE;
-    teams.forEach((team, i) => {
+    teams.forEach((team) => {
         if (distanceToPlayoff(team, playoffValue) < closestDistance) {
             closestDistance = distanceToPlayoff(team, playoffValue);
         }
