@@ -3,6 +3,7 @@ import ContentEditable from "react-contenteditable";
 import {IconButton} from "@mui/joy";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Resizable from "./Resizable.jsx";
 
 
 const sumTeamPoints = (team) => {
@@ -121,19 +122,45 @@ const QuizTable = ({
                 <table>
                     <thead>
                     <tr>
-                        <th className={"size"}>Liczba osób</th>
-                        <th>Nazwa drużyny</th>
-                        <th className={"points"}>Kategoria I</th>
-                        <th className={"points"}>Kategoria II</th>
-                        <th className={"points"}>Kategoria III</th>
-                        <th className={"points"}>Kategoria IV</th>
-                        <th className={"points"}>Kategoria V</th>
-                        <th className={"points"}>Kategoria VI</th>
-                        <th className={"points"}>Kategoria VII</th>
-                        <th className={"points"}>Kategoria VIII</th>
-                        <th className={"points"}>Kategoria IX</th>
-                        <th className={"sum"}>Suma</th>
-                        <th className={"playoffs"}>Dogrywka<br/>{data.playoffSet ? data.correctPlayoff : ""}</th>
+                        <Resizable>
+                            Liczba osób
+                        </Resizable>
+                        <Resizable>
+                            Nazwa drużyny
+                        </Resizable>
+                        <Resizable>
+                            Kategoria I
+                        </Resizable>
+                        <Resizable>
+                            Kategoria II
+                        </Resizable>
+                        <Resizable>
+                            Kategoria III
+                        </Resizable>
+                        <Resizable>
+                            Kategoria IV
+                        </Resizable>
+                        <Resizable>
+                            Kategoria V
+                        </Resizable>
+                        <Resizable>
+                            Kategoria VI
+                        </Resizable>
+                        <Resizable>
+                            Kategoria VII
+                        </Resizable>
+                        <Resizable>
+                            Kategoria VIII
+                        </Resizable>
+                        <Resizable>
+                            Kategoria IX
+                        </Resizable>
+                        <Resizable>
+                            Suma
+                        </Resizable>
+                        <Resizable>
+                            Dogrywka<br/>{data.playoffSet ? data.correctPlayoff : ""}
+                        </Resizable>
                     </tr>
                     </thead>
                     <tbody>

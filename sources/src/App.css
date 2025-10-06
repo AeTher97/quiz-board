@@ -12,7 +12,7 @@ table {
 
 thead tr {
   background-color: #ff4040;
-  color: white;
+  color: #000000;
 }
 
 table tr:last-child td:first-child {
@@ -29,18 +29,6 @@ table tr:first-child th:first-child {
 
 table tr:first-child th:last-child {
   border-top-right-radius:  7px;
-}
-
-.points {
-  width: 7%;
-}
-
-.sum, .playoffs {
-  width: 6%;
-}
-
-.size {
-  width: 8%;
 }
 
 td {
@@ -86,4 +74,8 @@ tr {
 
 .playoff-winner {
   background-color: #bef6ad;
+}
+
+.resizable {
+  cursor: col-resize;
 }
