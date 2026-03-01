@@ -80,13 +80,15 @@ function App() {
 
     const [loadOpen, setLoadOpen] = useState(false);
     const [playoffDialogOpen, setPlayoffDialogOpen] = useState(false);
+    const [placesCountDialogOpen, setPlacesCountDialogOpen] = useState(false);
     const [quizLoading, setQuizLoading] = useState(false);
     const [presenterView, setPresenterView] = useState(false);
     const [openedFileId, setOpenedFileId] = useState(null);
+    const [tempPlacesCountValue, setTempPlacesCountValue] = useState(4);
     const [tempPlayoffValue, setTempPlayoffValue] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
     const [data, setData] = useState({
-        correctPlayoff: 0, teams: [], playoffSet: false, name: "Quiz bez nazwy"
+        correctPlayoff: 0, teams: [], playoffSet: false, name: "Quiz bez nazwy", placesCount: 4
     });
 
     const {
@@ -198,6 +200,15 @@ function App() {
         });
     }
 
+    const setPlacesCount = (value) => {
+        setData(() => {
+            const newData = cloneData();
+            newData.placesCount = value;
+            return newData;
+        });
+    }
+
+
     const recalculate = () => {
         setData(data => {
             const newData = cloneData();
@@ -244,6 +255,8 @@ function App() {
                                recalculate={recalculate}/>
                 </div> : <LinearProgress/>}
                 {!presenterView && <div style={{display: "flex", justifyContent: "center", gap: 5, marginTop: 10}}>
+                    <Button onClick={() => setPlacesCountDialogOpen(true)} variant={"outlined"} color={"primary"}>Ustaw liczbę miejsc
+                        ({data.placesCount})</Button>
                     <Button onClick={recalculate}>Przelicz</Button>
                     <Button onClick={() => setPlayoffDialogOpen(true)} variant={"outlined"}>Ustaw wartość
                         dogrywki</Button>
@@ -291,7 +304,7 @@ function App() {
                 <ModalDialog>
                     <ModalClose onClick={() => setPlayoffDialogOpen(false)}/>
                     <DialogTitle>Ustaw wartość dogrywki</DialogTitle>
-                    <Input onChange={e => setTempPlayoffValue(e.target.value)}/>
+                    <Input onChange={e => setTempPlayoffValue(e.target.value)} type={"number"}/>
                     <Button onClick={() => {
                         setPlayoffValue(tempPlayoffValue)
                         setPlayoffDialogOpen(false);
@@ -299,11 +312,19 @@ function App() {
                 </ModalDialog>
             </Modal>
 
-            <Modal open={!loggedIn}>
+            <Modal open={placesCountDialogOpen}>
                 <ModalDialog>
-                    <div id="signInDiv"/>
+                    <ModalClose onClick={() => setPlacesCountDialogOpen(false)}/>
+                    <DialogTitle>Ustaw liczbę miejsc</DialogTitle>
+                    <Input onChange={e => setTempPlacesCountValue(e.target.value)} type={"number"}/>
+                    <Button onClick={() => {
+                        setPlacesCount(tempPlacesCountValue)
+                        setPlacesCountDialogOpen(false);
+                    }}>Ustaw wartość</Button>
                 </ModalDialog>
             </Modal>
+
+
         </>
     )
 }

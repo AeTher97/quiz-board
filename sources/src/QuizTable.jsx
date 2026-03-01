@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import ContentEditable from "react-contenteditable";
-import {IconButton} from "@mui/joy";
+import React, {useEffect, useState} from 'react';
+import ContentEditable from "./ContentEditable.jsx";
+import {IconButton, Input} from "@mui/joy";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Resizable from "./Resizable.jsx";
@@ -62,6 +62,7 @@ const goTopDown = (data, startIndex, classToSet) => {
 
 const resolveColoring = (data) => {
     let result = [];
+    const placesCount = data.placesCount;
 
     if (data.teams.length === 0) {
         return result;
@@ -71,10 +72,24 @@ const resolveColoring = (data) => {
         return result;
     }
 
-    result = [...result, ...goTopDown(data, 0, "winner")];
-    result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "second-place")];
-    result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "third-place")];
-    result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "fourth-place")];
+    console.log(placesCount)
+    if (placesCount > 0) {
+        result = [...result, ...goTopDown(data, 0, "winner")];
+    }
+    if (placesCount > 1) {
+        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "second-place")];
+    }
+    if (placesCount > 2) {
+        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "third-place")];
+    }
+    if (placesCount > 3) {
+        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "fourth-place")];
+    }
+    if (placesCount > 4) {
+        for (let i = 0; i < placesCount - 4; i++) {
+            result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "fourth-place")];
+        }
+    }
 
     const closestDistance = getClosestDistanceToPlayoffValue(data.teams.slice(result.length, data.teams.length),
         data.correctPlayoff);
@@ -99,7 +114,7 @@ const QuizTable = ({
                    }) => {
 
     const [data, setData] = useState(loadedData || {
-        correctPlayoff: 0, teams: [], playoffSet: false
+        correctPlayoff: 0, teams: [], playoffSet: false, placesCount: 4
     });
 
     useEffect(() => {
@@ -177,7 +192,7 @@ const QuizTable = ({
                                              }}
                                              tagName={"td"}/>
                             <ContentEditable html={team.name}
-                                             onChange={(e) => {
+                                             onBlur={(e) => {
                                                  setTeamName(teamIndex, e.currentTarget.innerHTML)
                                              }}
                                              tagName={"td"}/>
@@ -196,8 +211,8 @@ const QuizTable = ({
                             })}
                             <td>{sumTeamPoints(team)}</td>
                             <ContentEditable html={team.playoff.toString()}
-                                             onChange={e => {
-                                                 const invalidChars = /[^0-9]/gi
+                                             onBlur={e => {
+                                                 const invalidChars = /[^0-9.]/gi
                                                  let value = e.currentTarget.innerHTML;
                                                  if (invalidChars.test(value)) {
                                                      value = value.replace(invalidChars, "");
