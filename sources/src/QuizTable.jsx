@@ -93,8 +93,8 @@ const resolveColoring = (data) => {
 
     const closestDistance = getClosestDistanceToPlayoffValue(data.teams.slice(result.length, data.teams.length),
         data.correctPlayoff);
-    if (data.teams.length > 4) {
-        for (let i = 4; i < data.teams.length; i++) {
+    if (data.teams.length > placesCount) {
+        for (let i = placesCount; i < data.teams.length; i++) {
             if (distanceToPlayoff(data.teams[i], data.correctPlayoff) === closestDistance && allPointsFilled(data.teams[i])) {
                 result.push({row: i, class: "playoff-winner"})
             }
