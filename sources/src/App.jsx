@@ -318,7 +318,7 @@ function App() {
                     <DialogTitle>Ustaw liczbę miejsc</DialogTitle>
                     <Input onChange={e => setTempPlacesCountValue(e.target.value)} type={"number"}/>
                     <Button onClick={() => {
-                        setPlacesCount(tempPlacesCountValue)
+                        setPlacesCount(Number(tempPlacesCountValue))
                         setPlacesCountDialogOpen(false);
                     }}>Ustaw wartość</Button>
                 </ModalDialog>

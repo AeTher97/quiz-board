@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ContentEditable from "./ContentEditable.jsx";
-import {IconButton, Input} from "@mui/joy";
+import {IconButton} from "@mui/joy";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Resizable from "./Resizable.jsx";
@@ -77,17 +77,17 @@ const resolveColoring = (data) => {
         result = [...result, ...goTopDown(data, 0, "winner")];
     }
     if (placesCount > 1) {
-        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "second-place")];
+        result = [...result, ...goTopDown(data, result.at(-1).row + 1, "second-place")];
     }
     if (placesCount > 2) {
-        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "third-place")];
+        result = [...result, ...goTopDown(data, result.at(-1).row + 1, "third-place")];
     }
     if (placesCount > 3) {
-        result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "fourth-place")];
+        result = [...result, ...goTopDown(data, result.at(-1).row + 1, "fourth-place")];
     }
     if (placesCount > 4) {
         for (let i = 0; i < placesCount - 4; i++) {
-            result = [...result, ...goTopDown(data, result[result.length - 1].row + 1, "fourth-place")];
+            result = [...result, ...goTopDown(data, result.at(-1).row + 1, "fourth-place")];
         }
     }
 
@@ -100,6 +100,7 @@ const resolveColoring = (data) => {
             }
         }
     }
+    console.log(result)
     return result;
 }
 
